@@ -1,0 +1,373 @@
+[
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "patients",
+		"outputs": [
+			{
+				"name": "patientAddress",
+				"type": "address"
+			},
+			{
+				"name": "city",
+				"type": "string"
+			},
+			{
+				"name": "bloodType",
+				"type": "uint8"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "patientAddress",
+				"type": "address"
+			}
+		],
+		"name": "donationScheduled",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "donationId",
+				"type": "uint256"
+			}
+		],
+		"name": "donationHappened",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "donationCount",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "city",
+				"type": "string"
+			}
+		],
+		"name": "bloodbankSignup",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "city",
+				"type": "string"
+			},
+			{
+				"name": "bloodType",
+				"type": "uint8"
+			}
+		],
+		"name": "patientSignup",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "bloodBanks",
+		"outputs": [
+			{
+				"name": "bloodbankAddress",
+				"type": "address"
+			},
+			{
+				"name": "city",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "city",
+				"type": "string"
+			},
+			{
+				"name": "lastTattoo",
+				"type": "uint256"
+			},
+			{
+				"name": "lastDonation",
+				"type": "uint256"
+			}
+		],
+		"name": "donorChanges",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "city",
+				"type": "string"
+			},
+			{
+				"name": "bloodType",
+				"type": "uint8"
+			},
+			{
+				"name": "birthDate",
+				"type": "uint256"
+			},
+			{
+				"name": "lastTattoo",
+				"type": "uint256"
+			},
+			{
+				"name": "lastDonation",
+				"type": "uint256"
+			}
+		],
+		"name": "donorSignup",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "donors",
+		"outputs": [
+			{
+				"name": "donorAddress",
+				"type": "address"
+			},
+			{
+				"name": "city",
+				"type": "string"
+			},
+			{
+				"name": "bloodType",
+				"type": "uint8"
+			},
+			{
+				"name": "birthDate",
+				"type": "uint256"
+			},
+			{
+				"name": "lastTattoo",
+				"type": "uint256"
+			},
+			{
+				"name": "lastDonation",
+				"type": "uint256"
+			},
+			{
+				"name": "active",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "donations",
+		"outputs": [
+			{
+				"name": "startDate",
+				"type": "uint256"
+			},
+			{
+				"name": "hasDonated",
+				"type": "bool"
+			},
+			{
+				"name": "patientAddress",
+				"type": "address"
+			},
+			{
+				"name": "donorAddress",
+				"type": "address"
+			},
+			{
+				"name": "bloodbankAddress",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "donorAddress",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "city",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"name": "bloodType",
+				"type": "uint8"
+			}
+		],
+		"name": "NewDonor",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "donorAddress",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "city",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"name": "lastTattoo",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "lastDonation",
+				"type": "uint256"
+			}
+		],
+		"name": "DonorChanges",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "patientAddress",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "city",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"name": "bloodType",
+				"type": "uint8"
+			}
+		],
+		"name": "NewPatient",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "bloodbankAddress",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "city",
+				"type": "string"
+			}
+		],
+		"name": "NewBloodBank",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "patientAddress",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "donorAddress",
+				"type": "address"
+			}
+		],
+		"name": "Donated",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "id",
+				"type": "uint256"
+			}
+		],
+		"name": "DonationHappened",
+		"type": "event"
+	}
+]
