@@ -33,14 +33,14 @@ contract dPlasma {
         uint256 dateOfLastSymptom;
         bool pcrResultIsNegative;
         //if true (and we want TRUE)>>> person is not infected with SARS-Covid-19, if false, person tested positive hence, person has the virus and cant donate plasma for CPP
-        bool active;
+        // bool isActive;
+        // //person didn't donate in the past 30 days and can donate again
         bool isFemale;
         bool hadAnyPregnanciesorMiscarriagesMoreThanTwiceIsTrue;
         //if true >>> risks of TRALI (transfusion-related acute lung injury), person can't donate plasma or she might kill the patient of lung complication
         uint256 lastTattoo;
         //if date is less than 12 months from now, person can't donate
     }
-
     mapping(address => Donor) public donors;
 
     struct Patient {
@@ -50,37 +50,36 @@ contract dPlasma {
         BloodTypes bloodType;
         bool isINDregistered;
         //Investigational New Drug (IND) >> sick/terminal patients or family members must sign
-        //TODO: encher com as variaveis daqui: https://www.nybc.org/donate-blood/covid-19-and-blood-donation-copy/convalescent-plasma-information-family-patient-advocates/
+        //https://www.nybc.org/donate-blood/covid-19-and-blood-donation-copy/convalescent-plasma-information-family-patient-advocates/
     }
-
     mapping(address => Patient) public patients;
 
     struct BloodBank {
         address bloodbankAddress;
         string city;
-        //TODO: encher com as variaveis daqui: https://www.oneblood.org/
+        //https://www.nybc.org/donate-blood/covid-19-and-blood-donation-copy/convalescent-plasma/
     }
+    mapping(address => BloodBank) public bloodBanks;
 
     struct Hospital {
         address hospitalAddress;
+        string hospital;
         string city;
     }
+    mapping(address => Hospital) public hospitals;
 
     struct Doctor {
         address doctorAddress;
-        bool ishematologistDoctor;
+        string hospital;
     }
+    mapping(address => Doctor) public doctors;
 
-    struct hematologistDoctor {
+    struct Hematologist {
         address hematologistAddress;
-        bool isHematologist;
+        bool ishematologistDoctor;
         string city;
-        //TODO: encher com as variaveis daqui: https://www.oneblood.org/
     }
-
-    //TODO: Se der tempo, construir a Struct do hospital: https://www.nybc.org/donate-blood/covid-19-and-blood-donation-copy/convalescent-plasma-information-healthcare-providers/
-
-    mapping(address => BloodBank) public bloodBanks;
+    mapping(address => Hematologist) public hematologists;
 
     struct Donation {
         uint256 startDate;
@@ -89,20 +88,22 @@ contract dPlasma {
         address donorAddress;
         address bloodbankAddress;
     }
-
     mapping(uint256 => Donation) public donations;
     uint256 public donationCount;
 
     // events
-    event NewDonor(address donorAddress, string city, BloodTypes bloodType);
+    event NewDonor(address donorAddress, string city, BloodTypes bloodType, bool serologicalTestIsPositive, bool pcrResultIsNegative);
     event DonorChanges(
         address donorAddress,
         string city,
         uint256 lastTattoo,
         uint256 lastDonation
     );
-    event NewPatient(address patientAddress, string city, BloodTypes bloodType);
+    event NewPatient(address patientAddress, string city, string hospital, BloodTypes bloodType);
     event NewBloodBank(address bloodbankAddress, string city);
+    event NewHospital(address hospitalAddress, string hospital, string city);
+    event NewDoctor (address doctorAddress, string hospital);
+    event NewHematologist (address hematologistAddress, bool ishematologistDoctor, string city);
     event Donated(address patientAddress, address donorAddress);
     event DonationHappened(uint256 id);
 
@@ -115,25 +116,34 @@ contract dPlasma {
         string memory city,
         BloodTypes bloodType,
         uint256 birthDate,
-        uint256 lastTattoo,
-        uint256 lastDonation
-    ) public {
-        // criou a struct na memória
+        uint256 bodyWeight,
+        uint256 lastDonation,
+        bool serologicalTestIsPositive,
+        uint256 dateOfFirstSymptom,
+        uint256 dateOfLastSymptom,
+        bool pcrResultIsNegative,
+        bool isFemale,
+        bool hadAnyPregnanciesorMiscarriagesMoreThanTwiceIsTrue,
+        uint256 lastTattoo) public {
+     
         Donor memory newDonor = Donor(
             msg.sender,
             city,
             bloodType,
             birthDate,
-            lastTattoo,
+            bodyWeight,
             lastDonation,
-            true
-        );
+            serologicalTestIsPositive,
+            dateOfFirstSymptom,
+            dateOfLastSymptom,
+            pcrResultIsNegative,
+            isFemale,
+            hadAnyPregnanciesorMiscarriagesMoreThanTwiceIsTrue,
+            lastTattoo);
 
-        // inserindo a struct no mapping (state)
         donors[msg.sender] = newDonor;
 
-        // emitindo evento
-        emit NewDonor(msg.sender, city, bloodType);
+        emit NewDonor(msg.sender, city, bloodType, serologicalTestIsPositive, pcrResultIsNegative);
     }
 
     function donorChanges(
@@ -145,38 +155,66 @@ contract dPlasma {
             donors[msg.sender].donorAddress != address(0),
             "Donor not found."
         );
-
         // criou um storage pointer
         Donor storage donor = donors[msg.sender];
-
         donor.city = city;
         donor.lastTattoo = lastTattoo;
         donor.lastDonation = lastDonation;
-        //emit
         emit DonorChanges(msg.sender, city, lastTattoo, lastDonation);
     }
 
-    // 2do patient - patientSignup
-    function patientSignup(string memory city, BloodTypes bloodType) public {
-        // criou a struct na memória
-        Patient memory newPatient = Patient(msg.sender, city, bloodType);
-
-        // inserindo a struct no mapping (state)
+    function patientSignup(
+        string memory city,
+        string memory hospital,
+        BloodTypes bloodType,
+        bool isINDregistered) public {
+    
+        Patient memory newPatient = Patient(
+            msg.sender,
+            city,
+            hospital,
+            bloodType,
+            isINDregistered);
+            
         patients[msg.sender] = newPatient;
 
-        // emitindo evento
-        emit NewPatient(msg.sender, city, bloodType);
+        emit NewPatient(msg.sender, city, hospital, bloodType);
+    }
+    
+    function hospitalSignup(string memory hospital, string memory city) public {
+
+        Hospital memory newHospital = Hospital(msg.sender, hospital, city);
+
+        hospitals[msg.sender] = newHospital;
+
+        emit NewHospital(msg.sender, hospital, city);
+    }
+    
+    function doctorSignup(string memory hospital) public {
+
+        Doctor memory newDoctor = Doctor(msg.sender, hospital);
+
+        doctors[msg.sender] = newDoctor;
+
+        emit NewDoctor(msg.sender, hospital);
+    }
+    
+    function HematologistSignup(bool ishematologistDoctor, string memory city) public {
+
+        Hematologist memory newHematologist = Hematologist(msg.sender, ishematologistDoctor, city);
+
+        hematologists[msg.sender] = newHematologist;
+
+        emit NewHematologist(msg.sender, ishematologistDoctor, city);
     }
 
-    // 2do bank
+
     function bloodbankSignup(string memory city) public {
-        // criou a struct na memória
+
         BloodBank memory newBloodBank = BloodBank(msg.sender, city);
 
-        // inserindo a struct no mapping (state)
         bloodBanks[msg.sender] = newBloodBank;
 
-        // emitindo evento
         emit NewBloodBank(msg.sender, city);
     }
 
