@@ -56,6 +56,7 @@ contract dPlasma {
 
     struct BloodBank {
         address bloodbankAddress;
+        string bloodbankName;
         string city;
         //https://www.nybc.org/donate-blood/covid-19-and-blood-donation-copy/convalescent-plasma/
     }
@@ -70,12 +71,14 @@ contract dPlasma {
 
     struct Doctor {
         address doctorAddress;
+        string doctorName;
         string hospital;
     }
     mapping(address => Doctor) public doctors;
 
     struct Hematologist {
         address hematologistAddress;
+        string hematologistName;
         bool ishematologistDoctor;
         string city;
     }
@@ -100,10 +103,10 @@ contract dPlasma {
         uint256 lastDonation
     );
     event NewPatient(address patientAddress, string city, string hospital, BloodTypes bloodType);
-    event NewBloodBank(address bloodbankAddress, string city);
+    event NewBloodBank(address bloodbankAddress, string bloodbankName, string city);
     event NewHospital(address hospitalAddress, string hospital, string city);
-    event NewDoctor (address doctorAddress, string hospital);
-    event NewHematologist (address hematologistAddress, bool ishematologistDoctor, string city);
+    event NewDoctor (address doctorAddress, string doctorName, string hospital);
+    event NewHematologist (address hematologistAddress, string hematologistName, bool ishematologistDoctor, string city);
     event Donated(address patientAddress, address donorAddress);
     event DonationHappened(uint256 id);
 
@@ -190,32 +193,32 @@ contract dPlasma {
         emit NewHospital(msg.sender, hospital, city);
     }
     
-    function doctorSignup(string memory hospital) public {
+    function doctorSignup(string memory hospital, string memory doctorName) public {
 
-        Doctor memory newDoctor = Doctor(msg.sender, hospital);
+        Doctor memory newDoctor = Doctor(msg.sender, doctorName, hospital);
 
         doctors[msg.sender] = newDoctor;
 
-        emit NewDoctor(msg.sender, hospital);
+        emit NewDoctor(msg.sender, doctorName, hospital);
     }
     
-    function HematologistSignup(bool ishematologistDoctor, string memory city) public {
+    function HematologistSignup(bool ishematologistDoctor, string memory hematologistName, string memory city) public {
 
-        Hematologist memory newHematologist = Hematologist(msg.sender, ishematologistDoctor, city);
+        Hematologist memory newHematologist = Hematologist(msg.sender, hematologistName, ishematologistDoctor, city);
 
         hematologists[msg.sender] = newHematologist;
 
-        emit NewHematologist(msg.sender, ishematologistDoctor, city);
+        emit NewHematologist(msg.sender, hematologistName, ishematologistDoctor, city);
     }
 
 
-    function bloodbankSignup(string memory city) public {
+    function bloodbankSignup(string memory bloodbankName, string memory city) public {
 
-        BloodBank memory newBloodBank = BloodBank(msg.sender, city);
+        BloodBank memory newBloodBank = BloodBank(msg.sender, bloodbankName, city);
 
         bloodBanks[msg.sender] = newBloodBank;
 
-        emit NewBloodBank(msg.sender, city);
+        emit NewBloodBank(msg.sender, bloodbankName, city);
     }
 
     // donations scheduled
