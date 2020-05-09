@@ -1,4 +1,5 @@
 pragma solidity 0.6.4;
+// import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC721/ERC721.sol";
 
 
 contract dPlasma {
@@ -23,30 +24,29 @@ contract dPlasma {
         BloodTypes bloodType;
         uint256 birthDate;
         //person must be between 18 and 50
-        uint256 bodyWeight;
+        // uint256 bodyWeight;
         //person must be heavier than 110 llbs (50kg) to donate
-        uint256 lastDonation;
-        //if date is less than 4 weeks, person is not available to donate
+        bool hasNotDonatedLastFourWeeks;
+        //if true (and we want TRUE) >>> person can donate. If date is less than 4 weeks, person is not available to donate
         bool serologicalTestIsPositive;
         //if true (and we want TRUE)>>> person has antibodies, if false, not eligible to do clinical trials or donate plasma for CPP
-        uint256 dateOfFirstSymptom;
-        uint256 dateOfLastSymptom;
         bool pcrResultIsNegative;
         //if true (and we want TRUE)>>> person is not infected with SARS-Covid-19, if false, person tested positive hence, person has the virus and cant donate plasma for CPP
         // bool isActive;
         // //person didn't donate in the past 30 days and can donate again
-        bool isFemale;
-        bool hadAnyPregnanciesorMiscarriagesMoreThanTwiceIsTrue;
+        bool isMale;
+        // bool hadAnyPregnanciesorMiscarriagesMoreThanTwiceIsTrue;
         //if true >>> risks of TRALI (transfusion-related acute lung injury), person can't donate plasma or she might kill the patient of lung complication
-        uint256 lastTattoo;
+        // uint256 lastTattoo;
         //if date is less than 12 months from now, person can't donate
     }
     mapping(address => Donor) public donors;
 
     struct Patient {
         address patientAddress;
-        string city;
+        string patient;
         string hospital;
+        string city;
         BloodTypes bloodType;
         bool isINDregistered;
         //Investigational New Drug (IND) >> sick/terminal patients or family members must sign
@@ -87,7 +87,6 @@ contract dPlasma {
     struct Donation {
         uint256 startDate;
         bool hasDonated;
-        address patientAddress;
         address donorAddress;
         address bloodbankAddress;
     }
@@ -95,14 +94,17 @@ contract dPlasma {
     uint256 public donationCount;
 
     // events
-    event NewDonor(address donorAddress, string city, BloodTypes bloodType, bool serologicalTestIsPositive, bool pcrResultIsNegative);
+    event NewDonor( 
+        address donorAddress, string city, BloodTypes bloodType, 
+        uint256 birthDate, bool hasNotDonatedLastFourWeeks, bool serologicalTestIsPositive,
+         bool pcrResultIsNegative, bool isMale
+        );
     event DonorChanges(
         address donorAddress,
         string city,
-        uint256 lastTattoo,
-        uint256 lastDonation
+        bool hasNotDonatedLastFourWeeks
     );
-    event NewPatient(address patientAddress, string city, string hospital, BloodTypes bloodType);
+    event NewPatient(address patientAddress, string patient, string city, string hospital, BloodTypes bloodType, bool isINDregistered);
     event NewBloodBank(address bloodbankAddress, string bloodbankName, string city);
     event NewHospital(address hospitalAddress, string hospital, string city);
     event NewDoctor (address doctorAddress, string doctorName, string hospital);
@@ -119,40 +121,30 @@ contract dPlasma {
         string memory city,
         BloodTypes bloodType,
         uint256 birthDate,
-        uint256 bodyWeight,
-        uint256 lastDonation,
+        bool hasNotDonatedLastFourWeeks, 
         bool serologicalTestIsPositive,
-        uint256 dateOfFirstSymptom,
-        uint256 dateOfLastSymptom,
         bool pcrResultIsNegative,
-        bool isFemale,
-        bool hadAnyPregnanciesorMiscarriagesMoreThanTwiceIsTrue,
-        uint256 lastTattoo) public {
+        bool isMale
+        ) public {
      
         Donor memory newDonor = Donor(
             msg.sender,
             city,
             bloodType,
             birthDate,
-            bodyWeight,
-            lastDonation,
+            hasNotDonatedLastFourWeeks,
             serologicalTestIsPositive,
-            dateOfFirstSymptom,
-            dateOfLastSymptom,
             pcrResultIsNegative,
-            isFemale,
-            hadAnyPregnanciesorMiscarriagesMoreThanTwiceIsTrue,
-            lastTattoo);
+            isMale);
 
         donors[msg.sender] = newDonor;
 
-        emit NewDonor(msg.sender, city, bloodType, serologicalTestIsPositive, pcrResultIsNegative);
+        emit NewDonor(msg.sender, city, bloodType, birthDate, hasNotDonatedLastFourWeeks, serologicalTestIsPositive, pcrResultIsNegative, isMale);
     }
 
     function donorChanges(
         string memory city,
-        uint256 lastTattoo,
-        uint256 lastDonation
+        bool hasNotDonatedLastFourWeeks
     ) public {
         require(
             donors[msg.sender].donorAddress != address(0),
@@ -161,27 +153,28 @@ contract dPlasma {
         // criou um storage pointer
         Donor storage donor = donors[msg.sender];
         donor.city = city;
-        donor.lastTattoo = lastTattoo;
-        donor.lastDonation = lastDonation;
-        emit DonorChanges(msg.sender, city, lastTattoo, lastDonation);
+        donor.hasNotDonatedLastFourWeeks = hasNotDonatedLastFourWeeks;
+        emit DonorChanges(msg.sender, city, hasNotDonatedLastFourWeeks);
     }
 
     function patientSignup(
-        string memory city,
+        string memory patient,
         string memory hospital,
+        string memory city,
         BloodTypes bloodType,
         bool isINDregistered) public {
     
         Patient memory newPatient = Patient(
             msg.sender,
-            city,
+            patient,
             hospital,
+            city,
             bloodType,
             isINDregistered);
             
         patients[msg.sender] = newPatient;
 
-        emit NewPatient(msg.sender, city, hospital, bloodType);
+        emit NewPatient(msg.sender, patient, hospital, city, bloodType, isINDregistered);
     }
     
     function hospitalSignup(string memory hospital, string memory city) public {
@@ -202,7 +195,7 @@ contract dPlasma {
         emit NewDoctor(msg.sender, doctorName, hospital);
     }
     
-    function HematologistSignup(bool ishematologistDoctor, string memory hematologistName, string memory city) public {
+    function hematologistSignup(bool ishematologistDoctor, string memory hematologistName, string memory city) public {
 
         Hematologist memory newHematologist = Hematologist(msg.sender, hematologistName, ishematologistDoctor, city);
 
@@ -223,33 +216,25 @@ contract dPlasma {
 
     // donations scheduled
     // called by donors
-    function donationScheduled(address patientAddress) public {
+    function donationScheduled(address bloodbankAddress) public {
         require(
             donors[msg.sender].donorAddress != address(0),
             "Caller is not a donor"
         );
-        require(
-            patients[patientAddress].patientAddress != address(0),
-            "Patient does not exist"
-        );
-        //require(bloodBanks[bloodbankAddress].bloodbankAddress != address(0), "Blood Bank does not exist");
+        require(bloodBanks[bloodbankAddress].bloodbankAddress != address(0), "Blood Bank does not exist");
 
         // criou o struct na memória
         Donation memory newDonation = Donation(
             now,
             false,
-            patientAddress,
             msg.sender,
             address(0)
         );
-
         donationCount++;
-
         // gravou o struct no mapping (estado)
         donations[donationCount] = newDonation;
-
         // 2do event
-        emit Donated(msg.sender, patientAddress);
+        emit Donated(msg.sender, bloodbankAddress);
     }
 
     modifier onlyBloodBank {
@@ -273,7 +258,7 @@ contract dPlasma {
         // event
         emit DonationHappened(donationId);
 
-        // issue NFT to donor
+        // // issue NFT to donor
         // tokenContract.mint(donation.donorAddress, donationId);
     }
 }
