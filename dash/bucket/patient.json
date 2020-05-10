@@ -1,0 +1,14 @@
+{
+    "patient_query": [
+        {
+            "id": 1,
+            "ethereum-address": "0x...1p1",
+            "address": "Street A1P, 1, Neighboor A1P, Province A1P, Country A, Postal Code, 00000-854",
+            "city": "A",
+            "hospital-id": "0x...456",
+            "blood-type": "AB-",
+            "IND": "TRUE"
+
+        }
+    ]
+}

@@ -1,0 +1,44 @@
+{
+    "hospital_query":[
+        {
+            "id": 1,
+            "address": "Street A, 111, Neighboor A, Province A, Country A, Postal Code, 00000-111",
+            "hospital": "Hospital A",
+            "city": "City A",
+            "ethereum-address": "0x...456"
+        },
+
+        {
+            "id": 2,
+            "address": "Street B, 222, Neighboor B, Province B, Country B, Postal Code, 00000-222",
+            "hospital": "Hospital B",
+            "city": "City B",
+            "ethereum-address": "0x...545"
+        },
+
+        {
+            "id": 3,
+            "address": "Street C, 333, Neighboor C, Province C, Country C, Postal Code, 00000-333",
+            "hospital": "Hospital C",
+            "city": "City C",
+            "ethereum-address": "0x...372"
+        },
+
+        {
+            "id": 4,
+            "address": "Street D, 444, Neighboor D, Province D, Country D, Postal Code, 00000-444",
+            "hospital": "Hospital D",
+            "city": "City D",
+            "ethereum-address": "0x...111"
+        },
+
+        {
+            "id": 5,
+            "address": "Street E, 555, Neighboor E, Province E, Country E, Postal Code, 00000-555",
+            "hospital": "Hospital E",
+            "city": "City E",
+            "ethereum-address": "0x...095"
+        }
+        
+    ]
+}
