@@ -1,44 +1,21 @@
 {
     "hospital_query":[
-        {
-            "id": 1,
-            "address": "Street A, 111, Neighboor A, Province A, Country A, Postal Code, 00000-111",
-            "hospital": "Hospital A",
-            "city": "City A",
-            "ethereum-address": "0x...456"
-        },
-
-        {
-            "id": 2,
-            "address": "Street B, 222, Neighboor B, Province B, Country B, Postal Code, 00000-222",
-            "hospital": "Hospital B",
-            "city": "City B",
-            "ethereum-address": "0x...545"
-        },
-
-        {
-            "id": 3,
-            "address": "Street C, 333, Neighboor C, Province C, Country C, Postal Code, 00000-333",
-            "hospital": "Hospital C",
-            "city": "City C",
-            "ethereum-address": "0x...372"
-        },
-
-        {
-            "id": 4,
-            "address": "Street D, 444, Neighboor D, Province D, Country D, Postal Code, 00000-444",
-            "hospital": "Hospital D",
-            "city": "City D",
-            "ethereum-address": "0x...111"
-        },
-
-        {
-            "id": 5,
-            "address": "Street E, 555, Neighboor E, Province E, Country E, Postal Code, 00000-555",
-            "hospital": "Hospital E",
-            "city": "City E",
-            "ethereum-address": "0x...095"
-        }
+            {
+                "id": 6,
+                "address": "550 1st Avenue, New York, NY 10016, United States",
+                "hospital_name": "NYU Hospital",
+                "city": "New York",
+                "ethereum_address": "0xBcF4f278d9c801f3386BC5328553417f4d600043",
+                "three_box_profile": "https://www.3box.io/0xbcf4f278d9c801f3386bc5328553417f4d600043"
+            },
+            {
+                "id": 7,
+                "address": "1 Gustave L. Levy Place New York, NY 10029-6574",
+                "hospital_name": "The Mount Sinai Hospital",
+                "city": "New York",
+                "ethereum_address": "0x5ACE75F86123b7434f9Da8A1459886d74Bdc5fb2",
+                "three_box_profile": "https://www.3box.io/0x5ace75f86123b7434f9da8a1459886d74bdc5fb2"
+            }
         
     ]
 }

@@ -1,0 +1,20 @@
+{
+    "doctor_query":[
+        {
+            "id": 3,
+            "complete_name": "Doctor 1",
+            "license": "3GV7RSE07HJ8mQB",
+            "ethereum_address": "0x6F9567Ef74D62651B6cFfCE0a14Dd211087B8491",
+            "three_box_profile": "https://www.3box.io/0x6f9567ef74d62651b6cffce0a14dd211087b8491",
+            "hospital": 6
+        },
+        {
+            "id": 4,
+            "complete_name": "Doctor 2",
+            "license": "laj2qUowXnAtv0j",
+            "ethereum_address": "0x79238629C10E82cAE9B47E07a144af1684eC81fd",
+            "three_box_profile": "https://www.3box.io/0x79238629c10e82cae9b47e07a144af1684ec81fd",
+            "hospital": 7
+        }
+    ]
+}

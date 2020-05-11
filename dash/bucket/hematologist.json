@@ -1,0 +1,12 @@
+{
+    "hematologist_query":[
+        {
+            "id": 2,
+            "complete_name": "Hematologist 1",
+            "license": "tRHhf8YusNrL75X",
+            "ethereum_address": "0xD0D814AA69c7Ed01E912F5a3bA87238250B40Db5",
+            "three_box_profile": "https://www.3box.io/0xd0d814aa69c7ed01e912f5a3ba87238250b40db5",
+            "hospital": 6
+        }
+    ]
+}
